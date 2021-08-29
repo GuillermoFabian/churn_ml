@@ -31,7 +31,7 @@ For testing purpose:
 
 ### Running module:
 
- > import churn_library as cl
+> import churn_library as cl
 
 > df = cl.import_data('path_to_data)
 
@@ -43,7 +43,9 @@ For testing purpose:
          'Income_Category',
          'Card_Category'])
 
+
 > samples = cl.perform_feature_engineering(df_encoded)
+
 > train_models(samples[0], samples[1], samples[2], samples[3]) 
 
 Models stored in models folder and eda resultas stored in images folder. 
