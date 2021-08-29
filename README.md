@@ -27,6 +27,25 @@ For testing purpose:
 
 > python churn_script_logging_and_test.py
 
+
+
+### Running module:
+
+ > import churn_library as cl
+
+> df = cl.import_data('path_to_data)
+
+> df_encoded = encoder_helper(
+        df,
+        ['Gender',
+         'Education_Level',
+         'Marital_Status',
+         'Income_Category',
+         'Card_Category'])
+
+> samples = cl.perform_feature_engineering(df_encoded)
+> train_models(samples[0], samples[1], samples[2], samples[3]) 
+
 Models stored in models folder and eda resultas stored in images folder. 
 The logs results output produced by testing is stored under churn_library.log in logs folder
 

@@ -46,23 +46,23 @@ def perform_eda(df):
         lambda val: 0 if val == "Existing Customer" else 1)
     plt.figure(figsize=(20, 10))
     df['Churn'].hist()
-    plt.savefig('images/churn_hist.svg')
+    plt.savefig('images/eda/churn_hist.svg')
 
     plt.figure(figsize=(20, 10))
     df['Customer_Age'].hist()
-    plt.savefig('images/churn_age.svg')
+    plt.savefig('images/eda/churn_age.svg')
 
     plt.figure(figsize=(20, 10))
     df.Marital_Status.value_counts('normalize').plot(kind='bar')
-    plt.savefig('images/marital_status_bar_chart.svg')
+    plt.savefig('images/eda/marital_status_bar_chart.svg')
 
     plt.figure(figsize=(20, 10))
     sns.distplot(df['Total_Trans_Ct'])
-    plt.savefig('images/distribution_transactions.svg')
+    plt.savefig('images/eda/distribution_transactions.svg')
 
     plt.figure(figsize=(20, 10))
     sns.heatmap(df.corr(), annot=False, cmap='Dark2_r', linewidths=2)
-    plt.savefig('images/heat_map.svg')
+    plt.savefig('images/eda/heat_map.svg')
 
 
 def encoder_helper(df, category_lst, response=''):
@@ -143,16 +143,16 @@ def classification_report_image(y_train,
              None
     '''
     classification_report(y_train, y_train_preds_lr)
-    plt.savefig("images/train_lr_classification_report.svg")
+    plt.savefig("images/eda/train_lr_classification_report.svg")
 
     classification_report(y_test, y_test_preds_lr)
-    plt.savefig("images/test_lr_classification_report.svg")
+    plt.savefig("images/eda/test_lr_classification_report.svg")
 
     classification_report(y_train, y_train_preds_rf)
-    plt.savefig("images/train_rf_classification_report.svg")
+    plt.savefig("images/eda/train_rf_classification_report.svg")
 
     classification_report(y_test, y_test_preds_rf)
-    plt.savefig("images/train_rf_classification_report.svg")
+    plt.savefig("images/eda/train_rf_classification_report.svg")
 
 
 def feature_importance_plot(model, X_data, output_pth):
@@ -219,7 +219,23 @@ def train_models(X_train, X_test, y_train, y_test):
     ax = plt.gca()
     plot_roc_curve(cv_rfc.best_estimator_, X_test, y_test, ax=ax, alpha=0.8)
     lrc_plot.plot(ax=ax, alpha=0.8)
-    plt.savefig("images/scores_models.svg")
+    plt.savefig("images/results/scores_models.svg")
+
+    importances = cv_rfc.best_estimator_.feature_importances_
+    # Sort feature importances in descending order
+    indices = np.argsort(importances)[::-1]
+    # Rearrange feature names so they match the sorted feature importances
+    names = [X_train.columns[i] for i in indices]
+    # Create plot
+    plt.figure(figsize=(20, 5))
+    # Create plot title
+    plt.title("Feature Importance")
+    plt.ylabel('Importance')
+    # Add bars
+    plt.bar(range(X_train.shape[1]), importances[indices])
+    # Add feature names as x-axis labels
+    plt.xticks(range(X_train.shape[1]), names, rotation=90)
+    plt.savefig("images/results/features_importance.svg")
 
     joblib.dump(cv_rfc.best_estimator_, './models/rfc_model.pkl')
     joblib.dump(lrc, './models/logistic_model.pkl')
